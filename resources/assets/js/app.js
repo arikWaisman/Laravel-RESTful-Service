@@ -5,16 +5,23 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+//require('./bootstrap');
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the body of the page. From here, you may begin adding components to
- * the application, or feel free to tweak this setup for your needs.
- */
+import React from 'react';
+import ReactDom from 'react-dom';
 
-Vue.component('example', require('./components/Example.vue'));
+const app = window.document.getElementById('app');
 
-const app = new Vue({
-    el: 'body'
-});
+class Test extends React.Component{
+
+    render(){
+        return(
+            <div>
+                hello world
+            </div>
+        );
+    }
+
+}
+
+ReactDom.render(<Test/>,  window.document.getElementById('app') );
