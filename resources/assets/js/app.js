@@ -10,14 +10,49 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-const app = window.document.getElementById('app');
-
 class Test extends React.Component{
+
+    constructor(){
+        super();
+        this.state = {
+            sourceData: {},
+            testObj:{
+                testArr:  ['one', 'two', 'three']
+            }
+        };
+
+    }
+
+    getInitialData(){
+
+        fetch('http://laravel-rest.dev/api/v1/meeting', { method: 'get' })
+        .then( (response) => {
+            return response.json();
+        })
+        .then( (returnedJSON) => {
+            console.log(returnedJSON);
+            this.setState({
+                sourceData: returnedJSON
+            });
+        })
+
+    }
+
+    componentWillMount(){
+        this.getData();
+    }
+
+
 
     render(){
         return(
             <div>
                 hello world
+                <br />
+                {this.state.sourceData.msg}
+                <ol>
+                    {this.state.testObj.testArr.map( (key, i) => <li key={i}>{key}</li> ) }
+                </ol>
             </div>
         );
     }
