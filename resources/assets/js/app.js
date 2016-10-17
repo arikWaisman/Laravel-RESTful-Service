@@ -10,18 +10,9 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
+import Component from './components/component';
+
 class Test extends React.Component{
-
-    constructor(){
-        super();
-        this.state = {
-            sourceData: {},
-            testObj:{
-                testArr:  ['one', 'two', 'three']
-            }
-        };
-
-    }
 
     getInitialData(){
 
@@ -38,21 +29,11 @@ class Test extends React.Component{
 
     }
 
-    componentWillMount(){
-        this.getData();
-    }
-
-
 
     render(){
         return(
             <div>
-                hello world
-                <br />
-                {this.state.sourceData.msg}
-                <ol>
-                    {this.state.testObj.testArr.map( (key, i) => <li key={i}>{key}</li> ) }
-                </ol>
+               <Component sourceData={this.getInitialData} />
             </div>
         );
     }
