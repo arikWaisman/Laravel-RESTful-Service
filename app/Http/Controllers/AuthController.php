@@ -32,7 +32,7 @@ class AuthController extends Controller
 		if ( $user->save() ) { //will save data to DB, return true if successful and return the data entered into the DB
 
 			$user->signin = [
-				'href'   => 'api/va/user/signin',
+				'href'   => 'api/v1/user/signin',
 				'method' => 'POST',
 				'params' => 'email, password'
 			];

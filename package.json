@@ -19,5 +19,15 @@
     "lodash": "^4.14.0",
     "vue": "^1.0.26",
     "vue-resource": "^0.9.3"
+  },
+  "dependencies": {
+    "axios": "^0.15.2",
+    "react-redux": "^4.4.6",
+    "react-router": "^3.0.0",
+    "redux": "^3.6.0",
+    "redux-logger": "^2.7.4",
+    "redux-promise": "^0.5.3",
+    "redux-promise-middleware": "^4.2.0",
+    "redux-thunk": "^2.1.0"
   }
 }

@@ -11,6 +11,7 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
         <!-- Styles -->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css">
         <style>
             html, body {
                 background-color: #fff;
@@ -69,6 +70,6 @@
             <div id="app"></div>
         </div>
 
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/bundle.js') }}"></script>
     </body>
 </html>

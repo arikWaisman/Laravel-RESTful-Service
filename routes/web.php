@@ -11,6 +11,7 @@
 |
 */
 
-Route::get('/', function () {
+//this is to ensure the front end app handles the routing with pushstate rather than making a request to server
+Route::any('/{js_route?}', function(){
     return view('welcome');
-});
+    })->where('js_route', '[\/\w\.-]*');
