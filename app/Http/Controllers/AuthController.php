@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -76,6 +77,9 @@ class AuthController extends Controller
 
 		}
 
-		return response()->json(['token' => $token], 200);
+		return response()->json([
+				'token' => $token,
+				'user_id' => Auth::user()->id
+		], 200);
 	}
 }

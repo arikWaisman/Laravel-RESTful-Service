@@ -1,6 +1,7 @@
 const authReducer = (state = {
     isLoggedIn: sessionStorage.getItem('token') ? true : false, //check if logged in
-    token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : null, //check if logged in,
+    token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : null, //grab from session to not have to have token last longer between requests/page load
+    userId: sessionStorage.getItem('userId') ? sessionStorage.getItem('userId') : null, //this too ultimately gets stored in the session to survive refreshes and hard entered urls
     redirectAfterLoginURL: "/test"
 }, action) => {
     switch (action.type) {
@@ -8,7 +9,8 @@ const authReducer = (state = {
             state = {
                 ...state,
                 isLoggedIn: true,
-                token: action.payload, //grabbing the token from payload directly to not have to index in later
+                token: action.payload.token,
+                userId: action.payload.user_id,
                 errors: false //this is set to false to ensure that on success the errors object doesnt exist and gets removed from the UI
             };
             break;
@@ -29,7 +31,8 @@ const authReducer = (state = {
             state = {
                 ...state,
                 isLoggedIn: false,
-                token: null
+                token: null,
+                userId: null
             };
             break;
     }

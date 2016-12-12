@@ -19,7 +19,7 @@ export default (
         <Route component={checkIfLoggedIn}>
             <Route path={"test"} component={Test}/>
             <Route path={"create_meeting"} component={CreateMeeting}/>
-            <Route path={"update_meeting"} component={CreateMeeting}/>
+            <Route path={"update_meeting/:meetingId"} component={CreateMeeting}/>
         </Route>
         <Route path={"meeting/:meetingId"} component={Meeting} />
         <Route path={"login"} component={Login} />

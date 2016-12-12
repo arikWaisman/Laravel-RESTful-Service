@@ -30,7 +30,7 @@ const fetchMeetingFailed = (errors) => {
 
 export const createNewMeeting = ( formData, token, dispatch) => {
 
-    dispatch({type: "UPDATE_MEETING_REQUEST"});
+    dispatch({type: "CREATE_NEW_MEETING_REQUEST"});
 
     //this call needs a token as its protected on the server
     return axios.post(`http://laravel-rest.dev/api/v1/meeting?token=${token}`, {
@@ -39,7 +39,7 @@ export const createNewMeeting = ( formData, token, dispatch) => {
         description: formData.description
     })
     .then( (response) => {
-        const meetingId = response.data.meeting.id;
+        let meetingId = response.data.meeting.id;
         dispatch({type: "MEETING_CREATED_REDIRECT_TO_MEETING"});
         browserHistory.replace(`meeting/${meetingId}`)
     })
@@ -54,3 +54,33 @@ const createMeetingFailed = (error) => {
     }
 };
 
+export const updateMeeting = ( formData, token, meetingId, dispatch) => {
+
+    dispatch({type: "UPDATE_MEETING_REQUEST"});
+    return axios.patch(`http://laravel-rest.dev/api/v1/meeting/${meetingId}/?token=${token}`, {
+        time: formData.time,
+        title: formData.title,
+        description: formData.description
+    })
+    .then( (response) => {
+        console.log(response);
+        dispatch( receiveUpdatedMeeting(response.data) );
+        //let meetingId = response.data.meeting.id;
+        browserHistory.replace(`/meeting/${meetingId}`);
+    })
+    .catch( (error) => dispatch( updateMeetingFailed(error.response.data) ) );
+};
+
+const receiveUpdatedMeeting = (json) => {
+    return{
+        type: "RECEIVE_UPDATED_MEETING_AND_REDIRECT",
+        payload: json
+    };
+};
+
+const updateMeetingFailed = (error) => {
+    return{
+        type: "UPDATE_MEETING_FAILED",
+        payload: error
+    };
+};

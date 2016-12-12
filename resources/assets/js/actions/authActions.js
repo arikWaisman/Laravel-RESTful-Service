@@ -11,7 +11,7 @@ export const loginGetToken = ( formData, dispatch ) => {
             password: formData.password
         })
         .then( (response) => {
-            dispatch( receiveToken( response.data.token ) );
+            dispatch( receiveToken( response.data ) );
         } )
         .catch( (error) => dispatch( loginFailed(error.response.data) ) );
 

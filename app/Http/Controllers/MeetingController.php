@@ -161,7 +161,7 @@ class MeetingController extends Controller
 
 		}
 
-		$meeting->time = Carbon::createFromFormat('YmdHie', $time); //process the time and create format
+		$meeting->time = Carbon::createFromFormat('YmdHie', $time)->toDateTimeString(); //process the time and create format
 		$meeting->title = $title;
 		$meeting->description = $description;
 

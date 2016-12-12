@@ -18,8 +18,17 @@ const meetingReducer = (state = {
                 meetingData: action.payload
             };
         break;
+        case "RECEIVE_UPDATED_MEETING_AND_REDIRECT":
+            state = {
+                ...state,
+                isFetching: false,
+                meetingData: action.payload
+            };
+            break;
+
         case "FETCH_MEETING_FAILED":
         case "CREATE_MEETING_FAILED":
+        case "UPDATE_MEETING_FAILED":
             state = {
                 ...state,
                 isFetching: false,

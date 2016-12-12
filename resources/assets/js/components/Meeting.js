@@ -1,17 +1,23 @@
 import React from "react";
 import {connect} from "react-redux";
+import {Link} from "react-router";
 import {fetchMeeting} from "../actions/meetingAction";
 
 class Meeting extends React.Component{
 
     componentWillMount(){
         const {dispatch} = this.props;
-        fetchMeeting(this.props.params.meetingId, dispatch);
+        //if(!this.props.meetingData) {
+            fetchMeeting(this.props.params.meetingId, dispatch);
+        //}
     }
+
+    //checkIfRegistered(this.props){
+    //
+    //}
 
     render(){
         const {isFetching, meetingData} = this.props; //destructuring props which are mapped from the state below... isFetching and meetingData are passed into this component as props
-        //const isEmpty = meetingData.length === 0; //this is false unless there is data available
         return(
             <div>
                 this is meeting id which is taken from query above: {this.props.params.meetingId}
@@ -32,8 +38,8 @@ class Meeting extends React.Component{
                             {meetingData.meeting.users.map( (user, key) => <li key={key}>{user.name} / {user.email}</li>)}
                         </ul>
                     </h3>
+                    {meetingData.meeting.users.some( (user) => { return user.id == this.props.userId; }) && <Link to={"/update_meeting/" + meetingData.meeting.id}><button>Update meeting</button></Link> /*if a user is registered to the meeting show update button*/}
                 </div>
-
                 }
             </div>
         );
@@ -46,9 +52,11 @@ const mapStateToProps = (state) => {
         isFetching,
         meetingData
     } = state.meetingReducer; //this is destructuring. there is a isFetching and meetingData inside the meetingReducer... call this way will set them rather than defining explicitly
+    const {userId} = state.authReducer;
     return{
         isFetching,
-        meetingData
+        meetingData,
+        userId
     }
 };
 

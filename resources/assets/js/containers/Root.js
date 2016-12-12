@@ -6,7 +6,7 @@ import {browserHistory} from 'react-router';
 class Root extends React.Component{
 
     componentDidUpdate(prevProps){ //these will fire when the props change, which will happen as isLoggedIn goes from true to false or vice versa
-        const { dispatch, redirectAfterLoginURL, token} = this.props;
+        const { dispatch, redirectAfterLoginURL, token, userId} = this.props;
         const userCreationSuccess = !prevProps.userCreated && this.props.userCreated;
         const isLoggingOut = prevProps.isLoggedIn && !this.props.isLoggedIn;
         const isLoggingIn = !prevProps.isLoggedIn && this.props.isLoggedIn;
@@ -19,11 +19,13 @@ class Root extends React.Component{
         if(isLoggingIn){
 
             sessionStorage.setItem('token', token); //I put the session here rather than the reducer to ensure i was setting and removing it in the same place. if it exists in state it'll exist in the session
+            sessionStorage.setItem('userId', userId); //storing this in session so it surface hard entered urls
             browserHistory.replace(redirectAfterLoginURL); //the default is set in initial state in login reducer
 
         } else if(isLoggingOut) {
 
             sessionStorage.removeItem('token');
+            sessionStorage.removeItem('userId');
             dispatch({
                 type: "LOGOUT_USER_SUCCESS"
             });
@@ -47,12 +49,13 @@ const mapStateToProps = (state) => {
     const {
         isLoggedIn,
         redirectAfterLoginURL,
-        token
+        token,
+        userId
         } = state.authReducer;
     const {
         userCreated
         } = state.registerReducer;
-    return { isLoggedIn, redirectAfterLoginURL, token, userCreated }
+    return { isLoggedIn, redirectAfterLoginURL, token, userCreated, userId }
 };
 
 export default connect(mapStateToProps)(Root)
