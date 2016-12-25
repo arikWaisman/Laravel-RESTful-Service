@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from  "react-redux";
 import {browserHistory} from "react-router";
-import {createNewMeeting, updateMeeting, fetchMeeting} from "../actions/meetingAction";
+import { createNewMeeting, updateMeeting, fetchMeeting, deleteMeeting }from "../actions/meetingAction";
 import {Input} from "../components/Input";
 
 class CreateMeeting extends React.Component {
@@ -27,7 +27,10 @@ class CreateMeeting extends React.Component {
     }
 
     componentWillReceiveProps(nextProps){ //this ensures state is populated and exists for hard entered urls
-        this.setState({...nextProps.meetingData.meeting});
+        if(nextProps.meetingData != null){
+            console.log(nextProps)
+            this.setState({...nextProps.meetingData.meeting});
+        }
     }
 
     redirectIfNotAuthToUpdate(){
@@ -88,6 +91,15 @@ class CreateMeeting extends React.Component {
 
     }
 
+    deleteMeetingExecute(){
+
+        let requestToken;
+        if(this.props.isLoggedIn){
+            requestToken = sessionStorage.getItem('token');
+        }
+        deleteMeeting(requestToken, this.props.params.meetingId, this.props.dispatch);
+    }
+
     render(){
         const {meetingData} = this.props;
 
@@ -106,7 +118,8 @@ class CreateMeeting extends React.Component {
         return(
             <div>
                 {errors}
-                {this.props.router.isActive('create_meeting') &&
+                {
+                    this.props.route.path == "create_meeting" &&
                     <form onSubmit={(e) => this.createMeetingSubmit(e)}>
                         <Input type={"text"} name={"title"} label={"title"} handleChange={ (e) => this.handleChange(e) }/>
                         <Input type={"text"} name={"time"} label={"time"} handleChange={ (e) => this.handleChange(e) }/>
@@ -115,15 +128,21 @@ class CreateMeeting extends React.Component {
                     </form>
                 }
                 {
-                this.props.routeParams.meetingId && /*if there are route parameters it means im passing an id to a specific meeting to update*/
-                meetingData &&
-                this.redirectIfNotAuthToUpdate() &&
-                <form id="updateForm" onSubmit={(e) => this.updateMeetingSubmit(e)}>
-                    <Input type={"text"} name={"title"} label={"title"} value={ this.state.title } handleChange={ (e) => this.handleChange(e) }/>
-                    <Input type={"text"} name={"time"} label={"time"}  value={this.state.time} handleChange={ (e) => this.handleChange(e) }/>
-                    <Input type={"textarea"} name={"description"} label={"description"}  value={this.state.description} handleChange={ (e) => this.handleChange(e) }/>
-                    <button>Update Meeting</button>
-                </form>
+                    this.props.route.path == "update_meeting/:meetingId" && /*if there are route parameters it means im passing an id to a specific meeting to update*/
+                    meetingData &&
+                    this.redirectIfNotAuthToUpdate() &&
+                    <form id="updateForm" onSubmit={(e) => this.updateMeetingSubmit(e)}>
+                        <Input type={"text"} name={"title"} label={"title"} value={ this.state.title } handleChange={ (e) => this.handleChange(e) }/>
+                        <Input type={"text"} name={"time"} label={"time"}  value={this.state.time} handleChange={ (e) => this.handleChange(e) }/>
+                        <Input type={"textarea"} name={"description"} label={"description"}  value={this.state.description} handleChange={ (e) => this.handleChange(e) }/>
+                        <button>Update Meeting</button>
+                    </form>
+                }
+                {
+                    this.props.route.path == "delete_meeting/:meetingId" &&
+                    meetingData &&
+                    meetingData.meeting.users[0].id == this.props.userId &&
+                    this.deleteMeetingExecute()
                 }
             </div>
         );

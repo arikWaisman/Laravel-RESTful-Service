@@ -43,7 +43,13 @@ export const createNewMeeting = ( formData, token, dispatch) => {
         dispatch({type: "MEETING_CREATED_REDIRECT_TO_MEETING"});
         browserHistory.replace(`meeting/${meetingId}`)
     })
-    .catch( (error) => dispatch( createMeetingFailed(error.response.data) ) );
+    .catch( (error) => {
+
+        dispatch( createMeetingFailed(error.response.data) );
+        redirectToLoginIfTokenExp(error.response.status, dispatch);
+
+
+    });
 
 };
 
@@ -63,12 +69,18 @@ export const updateMeeting = ( formData, token, meetingId, dispatch) => {
         description: formData.description
     })
     .then( (response) => {
-        console.log(response);
+
         dispatch( receiveUpdatedMeeting(response.data) );
-        //let meetingId = response.data.meeting.id;
         browserHistory.replace(`/meeting/${meetingId}`);
+
+
     })
-    .catch( (error) => dispatch( updateMeetingFailed(error.response.data) ) );
+    .catch( (error) =>{
+
+        dispatch( updateMeetingFailed(error.response.data) );
+        redirectToLoginIfTokenExp(error.response.status, dispatch);
+
+    } );
 };
 
 const receiveUpdatedMeeting = (json) => {
@@ -83,4 +95,81 @@ const updateMeetingFailed = (error) => {
         type: "UPDATE_MEETING_FAILED",
         payload: error
     };
+};
+
+export const deleteMeeting = (token, meetingId, dispatch) => {
+
+    dispatch({type: "DELETE_MEETING_REQUEST"});
+    return axios.delete(`http://laravel-rest.dev/api/v1/meeting/${meetingId}/?token=${token}`)
+        .then( (response) => {
+
+            dispatch( deleteMeetingSuccess(response.data) );
+            browserHistory.replace(`/`);
+
+        })
+        .catch( (error) =>{
+
+            dispatch( deleteMeetingFailed(error.response.data) );
+            redirectToLoginIfTokenExp(error.response.status, dispatch); //this should clear token errors on the front end
+
+        } );
+
+
+};
+
+const deleteMeetingSuccess = (json) => {
+    return{
+        type: "MEETING_DELETED_REDIRECT_HOME",
+        payload: json
+    };
+};
+
+const deleteMeetingFailed = (error) => {
+    return{
+        type: "DELETE_MEETING_FAILED",
+        payload: error
+    };
+};
+
+export const registerToMeeting = ( userId, meetingId, token, dispatch ) => {
+
+    dispatch({
+        type: "REGISTER_FOR_MEETING_REQUEST"
+    });
+    return axios.post(`http://laravel-rest.dev/api/v1/meeting/registration?token=${token}`,{
+            meeting_id: meetingId,
+            user_id: userId
+        })
+        .then( (response) => {
+            dispatch( registrationToMeetingSuccess( response.data ) );
+        } )
+        .catch( (error) => {
+            dispatch( registrationToMeetingFailed(error.response.data) );
+            redirectToLoginIfTokenExp(error.response.status, dispatch); //this should clear token errors on the front end
+
+        });
+
+};
+
+const registrationToMeetingSuccess = (json) => {
+    return{
+        type: "REGISTRATION_SUCCESS", //the response from the server contains objects not needed in store currently. I pull out what I need and send it to the reducer following the API's naming conventions
+        payload: {
+            meeting: json.meeting,
+            msg: json.msg
+        }
+    };
+};
+
+const registrationToMeetingFailed = (error) => {
+    return{
+        type: "REGISTRATION_FAILED",
+        payload: error
+    };
+};
+
+const redirectToLoginIfTokenExp = (statusCode, dispatch) => {
+    if(statusCode == 401){
+        dispatch({type: 'LOGOUT_USER_REQUEST'}); //dispatch authAction here to set isLoggedIn and other items in Auth store when token expires
+    }
 };

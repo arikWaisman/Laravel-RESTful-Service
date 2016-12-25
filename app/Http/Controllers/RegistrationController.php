@@ -53,12 +53,11 @@ class RegistrationController extends Controller
 			return response()->json($message, 404);
 
 		}
-
 		$user->meetings()->attach($meeting);
 
 		$response = [
 			'msg'        => 'User registered for meeting',
-			'meeting'    => $meeting,
+			'meeting'    => Meeting::with('users')->where('id', $meeting_id)->firstOrFail(), //send back the new meetings object after being updated with registered users
 			'user'       => $user,
 			'unregister' => [
 				'href'   => 'api/v1/meeting/registration/' . $meeting->id,

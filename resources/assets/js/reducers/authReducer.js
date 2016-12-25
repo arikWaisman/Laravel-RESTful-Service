@@ -2,7 +2,7 @@ const authReducer = (state = {
     isLoggedIn: sessionStorage.getItem('token') ? true : false, //check if logged in
     token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : null, //grab from session to not have to have token last longer between requests/page load
     userId: sessionStorage.getItem('userId') ? sessionStorage.getItem('userId') : null, //this too ultimately gets stored in the session to survive refreshes and hard entered urls
-    redirectAfterLoginURL: "/test"
+    redirectAfterLoginURL: null
 }, action) => {
     switch (action.type) {
         case "RECEIVE_USER_TOKEN":

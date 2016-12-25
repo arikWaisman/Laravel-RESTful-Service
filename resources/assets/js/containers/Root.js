@@ -1,6 +1,8 @@
 import React from "react";
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
+import {setRedirectUrl} from '../actions/authActions'
+
 
 //This component is used so all routes can be nested under it the root path... it will render child components with the routes after /whatever
 class Root extends React.Component{
@@ -11,6 +13,7 @@ class Root extends React.Component{
         const isLoggingOut = prevProps.isLoggedIn && !this.props.isLoggedIn;
         const isLoggingIn = !prevProps.isLoggedIn && this.props.isLoggedIn;
 
+
         if(userCreationSuccess){
             dispatch({type: "USER_CREATED_REDIRECT_TO_LOGIN"});
             browserHistory.replace('/login');
@@ -20,16 +23,17 @@ class Root extends React.Component{
 
             sessionStorage.setItem('token', token); //I put the session here rather than the reducer to ensure i was setting and removing it in the same place. if it exists in state it'll exist in the session
             sessionStorage.setItem('userId', userId); //storing this in session so it surface hard entered urls
-            browserHistory.replace(redirectAfterLoginURL); //the default is set in initial state in login reducer
+            browserHistory.replace(redirectAfterLoginURL); //the default is set in initial state in auth reducer
 
         } else if(isLoggingOut) {
 
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('userId');
+            dispatch( setRedirectUrl(this.props.currentURL) );
             dispatch({
                 type: "LOGOUT_USER_SUCCESS"
             });
-            browserHistory.replace('/register');
+            browserHistory.replace('/login');
 
         }
 
@@ -45,7 +49,7 @@ class Root extends React.Component{
 
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     const {
         isLoggedIn,
         redirectAfterLoginURL,
@@ -55,7 +59,9 @@ const mapStateToProps = (state) => {
     const {
         userCreated
         } = state.registerReducer;
-    return { isLoggedIn, redirectAfterLoginURL, token, userCreated, userId }
+    return { isLoggedIn, redirectAfterLoginURL, token, userCreated, userId,
+        currentURL: ownProps.location.pathname
+    }
 };
 
 export default connect(mapStateToProps)(Root)

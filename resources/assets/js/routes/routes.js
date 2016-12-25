@@ -16,10 +16,11 @@ import { checkIfUserLoggedIn } from "./route_callbacks";
 export default (
     <Route path={"/"} component={Root}>
         <IndexRoute component={App} />
-        <Route component={checkIfLoggedIn}>
+        <Route component={checkIfLoggedIn}> /*everything nested under this route will be auth protected*/
             <Route path={"test"} component={Test}/>
             <Route path={"create_meeting"} component={CreateMeeting}/>
             <Route path={"update_meeting/:meetingId"} component={CreateMeeting}/>
+            <Route path={"delete_meeting/:meetingId"} component={CreateMeeting}/>
         </Route>
         <Route path={"meeting/:meetingId"} component={Meeting} />
         <Route path={"login"} component={Login} />

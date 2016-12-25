@@ -16,7 +16,6 @@ class checkIfLoggedIn extends React.Component {
 
     }
 
-
     render(){
 
         if(this.props.isLoggedIn) {
