@@ -93,7 +93,7 @@ class RegistrationController extends Controller
 
 		$response = [
 			'msg'      => 'User unregistered from meeting',
-			'meeting'  => $meeting,
+			'meeting'  => Meeting::with('users')->where('id', $id)->firstOrFail(), //send back the new meetings object after being updated with unregistered users. users needs to exist in meetings object for proper functionality
 			'user'     => $user->id,
 			'register' => [
 				'href'   => 'api/v1/meeting/registration/',

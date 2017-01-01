@@ -33,6 +33,12 @@ const meetingReducer = (state = {
                 meetingData: action.payload
             };
             break;
+        case "UNREGISTER_FROM_MEETING_SUCCESS":
+            state = {
+                ...state,
+                isFetching: false,
+                meetingData: action.payload
+            };
         case "FETCH_MEETING_FAILED":
         case "CREATE_MEETING_FAILED":
         case "UPDATE_MEETING_FAILED":

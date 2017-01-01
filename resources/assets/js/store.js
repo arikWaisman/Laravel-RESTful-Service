@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
-import promise from "redux-promise";
+//import promise from "redux-promise";
 
 import testReducer from "./reducers/testReducer";
 import meetingsReducer from "./reducers/meetingsReducer";
@@ -18,6 +18,6 @@ export default createStore( combineReducers({
     registerReducer
 
 }), {}, composeEnhancers(
-    applyMiddleware( logger(), thunk, promise)
+    applyMiddleware( logger(), thunk /*, promise*/)
 )); //middlewares go between the action and reducer
-//export default createStore(testReducer);
+//export default createStore(testReducer);//export default createStore(testReducer);

@@ -15,3 +15,4 @@
 Route::any('/{js_route?}', function(){
     return view('welcome');
     })->where('js_route', '[\/\w\.-]*');
+

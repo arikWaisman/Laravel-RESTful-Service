@@ -168,6 +168,40 @@ const registrationToMeetingFailed = (error) => {
     };
 };
 
+
+export const unregisterFromMeeting = (meetingId, token, dispatch) => {
+
+    dispatch({
+        type: "UNREGISTER_FROM_MEETING_REQUEST"
+    });
+    return axios.delete(`http://laravel-rest.dev/api/v1/meeting/registration/${meetingId}?token=${token}`)
+            .then( (response) => {
+                dispatch( unregisterFromMeetingSuccess(response.data) );
+            })
+            .catch( (error) => {
+                dispatch( unregisterFromMeetingFailed(error.response.data) );
+                redirectToLoginIfTokenExp(error.response.status, dispatch); //this should clear token errors on the front end
+            })
+
+};
+
+const unregisterFromMeetingSuccess = (json) => {
+    return{
+        type: "UNREGISTER_FROM_MEETING_SUCCESS", //the response from the server contains objects not needed in store currently. I pull out what I need and send it to the reducer following the API's naming conventions
+        payload: {
+            meeting: json.meeting,
+            msg: json.msg
+        }
+    };
+};
+
+const unregisterFromMeetingFailed = (error) => {
+    return{
+        type: "UNREGISTER_FROM_MEETING_FAILED",
+        payload: error
+    };
+};
+
 const redirectToLoginIfTokenExp = (statusCode, dispatch) => {
     if(statusCode == 401){
         dispatch({type: 'LOGOUT_USER_REQUEST'}); //dispatch authAction here to set isLoggedIn and other items in Auth store when token expires
