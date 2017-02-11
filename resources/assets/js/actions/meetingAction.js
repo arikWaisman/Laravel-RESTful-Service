@@ -156,7 +156,7 @@ const registrationToMeetingSuccess = (json) => {
         type: "REGISTRATION_SUCCESS", //the response from the server contains objects not needed in store currently. I pull out what I need and send it to the reducer following the API's naming conventions
         payload: {
             meeting: json.meeting,
-            msg: json.msg
+            registrationMsg: json.msg
         }
     };
 };
@@ -190,7 +190,7 @@ const unregisterFromMeetingSuccess = (json) => {
         type: "UNREGISTER_FROM_MEETING_SUCCESS", //the response from the server contains objects not needed in store currently. I pull out what I need and send it to the reducer following the API's naming conventions
         payload: {
             meeting: json.meeting,
-            msg: json.msg
+            registrationMsg: json.msg
         }
     };
 };

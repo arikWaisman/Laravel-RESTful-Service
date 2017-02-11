@@ -10,7 +10,7 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 
 import { Meetings } from '../components/Meetings';
-import {fetchAllMeetings} from "../actions/meetingsAction";
+import {fetchAllMeetings} from "../actions/allMeetingsReducer";
 
 class App extends React.Component{
 
@@ -41,10 +41,6 @@ class App extends React.Component{
 
     }
 
-    displayErrors(errors){
-
-    }
-
     handleChange(e){
 
         this.setState({ [e.target.name]: e.target.value });
@@ -52,16 +48,16 @@ class App extends React.Component{
         console.log(this.state);
 
     }
-    //
+
     componentWillMount(){
         const { dispatch } = this.props; // this is passed down form the state
-        dispatch( fetchAllMeetings() );
+        fetchAllMeetings(dispatch);
     }
 
 
 
     render(){
-        if( this.props.sourceData == 0 ) {
+        if( !this.props.allMeetings ) {
             return (
                 <div>
                     waiting for data!!!
@@ -80,7 +76,7 @@ class App extends React.Component{
                         <input type="password" name="password" onChange={ (e) => this.handleChange(e) }/>
                         <button>submit</button>
                     </form>
-                    <Meetings data={this.props.sourceData}/>
+                    <Meetings data={this.props.allMeetings}/>
                 </div>
             );
         }
@@ -90,7 +86,7 @@ class App extends React.Component{
 
 const mapStateToProps = (state) => {
     return{
-        sourceData: state.meetingsReducer.sourceData
+        allMeetings: state.allMeetingsReducer.allMeetings
     };
 };
 

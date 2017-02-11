@@ -129,13 +129,16 @@ class CreateMeeting extends React.Component {
                 }
                 {
                     this.props.route.path == "update_meeting/:meetingId" && /*if there are route parameters it means im passing an id to a specific meeting to update*/
-                    meetingData &&
                     this.redirectIfNotAuthToUpdate() &&
+                    meetingData &&
                     <form id="updateForm" onSubmit={(e) => this.updateMeetingSubmit(e)}>
-                        <Input type={"text"} name={"title"} label={"title"} value={ this.state.title } handleChange={ (e) => this.handleChange(e) }/>
-                        <Input type={"text"} name={"time"} label={"time"}  value={this.state.time} handleChange={ (e) => this.handleChange(e) }/>
-                        <Input type={"textarea"} name={"description"} label={"description"}  value={this.state.description} handleChange={ (e) => this.handleChange(e) }/>
-                        <button>Update Meeting</button>
+                        <Input type={"text"} name={"title"} label={"title"} value={ this.state.title }
+                               handleChange={ (e) => this.handleChange(e) }/>
+                        <Input type={"text"} name={"time"} label={"time"} value={this.state.time}
+                               handleChange={ (e) => this.handleChange(e) }/>
+                        <Input type={"textarea"} name={"description"} label={"description"}
+                               value={this.state.description} handleChange={ (e) => this.handleChange(e) }/>
+                        <button>Update Meeting</button>ˆ
                     </form>
                 }
                 {

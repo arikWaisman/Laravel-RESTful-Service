@@ -48,7 +48,7 @@ const meetingReducer = (state = {
                 errors: action.payload
             };
         break;
-        case "LOGOUT_USER_REQUEST": //calling this auth action method to clear the token expired method after logging back in
+        case "LOGOUT_USER_REQUEST": //calling this auth action method here to clear the token expired error after logging back in
             state = {
                 ...state,
                 errors: null
