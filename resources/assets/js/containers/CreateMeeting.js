@@ -129,8 +129,8 @@ class CreateMeeting extends React.Component {
                 }
                 {
                     this.props.route.path == "update_meeting/:meetingId" && /*if there are route parameters it means im passing an id to a specific meeting to update*/
-                    this.redirectIfNotAuthToUpdate() &&
                     meetingData &&
+                    this.redirectIfNotAuthToUpdate() && //meetingData needs to exist before this can be ran... the order matters!
                     <form id="updateForm" onSubmit={(e) => this.updateMeetingSubmit(e)}>
                         <Input type={"text"} name={"title"} label={"title"} value={ this.state.title }
                                handleChange={ (e) => this.handleChange(e) }/>
